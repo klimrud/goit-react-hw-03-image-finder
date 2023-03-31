@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { BiSearchAlt2 } from 'react-icons/bi';
-// import css from './Searchbar.module.css';
+import css from './Searchbar.module.css';
 
 export class Searchbar extends Component {
   state = {
@@ -15,20 +15,23 @@ export class Searchbar extends Component {
   handleSubmit = e => {
     e.preventDefault();
     console.log('hi');
-    this.props.onSubmit(this.state.value);
-    this.setState({ value: '' });
+    // this.props.onSubmit(this.state.value);
+    // this.setState({ value: '' });
+    this.props.createSearchTextImage(this.state.value)
   };
 
   render() {
     return (
-      <header class="searchbar">
-        <form class="form" onSubmit={this.handleSubmit}>
-          <button type="submit" class="button">
-            <span class="button-label"><BiSearchAlt2 /></span>
+      <header className={css.searchbar}>
+        <form className={css.form} onSubmit={this.handleSubmit}>
+          <button type="submit" className={css.button}>
+            <span className={css['button-label']}>
+              <BiSearchAlt2 className={css['icon-search']}/>
+              </span>
           </button>
 
           <input
-            class="input"
+            className={css.input}
             type="text"
             autocomplete="off"
             autofocus

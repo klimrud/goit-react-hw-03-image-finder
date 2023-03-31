@@ -1,5 +1,6 @@
 // import React from 'react';
+import css from './Button.module.css'
 
 export const Button =()=> {
-  return (<button>Load more</button>)
+  return (<button  className={css.Button}>Load more</button>)
 }

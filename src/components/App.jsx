@@ -6,12 +6,13 @@ import {ImageGalleryItem } from './ImageGalleryItem.jsx';
 import { Loader } from './Loader.jsx';
 import { Button } from './Button.jsx';
 import { Modal } from './Modal.jsx';
-// import './styles.css';
+import css from './App.module.css';
 
 export class App extends Component {
 state = {
- images: '',
+ searchTextImages: '',
  loading: false,
+ showModal: false,
 };
 
 // componentDidMount(){
@@ -19,22 +20,35 @@ state = {
 //   fetch(`https://pixabay.com/api/?key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`).then(res => console.log('first', res.json())).then(console.log());
 // }
 
+
+
 handleFormSubmit = (value)=>{
   console.log(value);
 };
 
+toggleModal = () => {
+  this.setState(({showModal}) =>({
+    showModal: !showModal,
+  }))
+}
+createSearchTextImage = (searchTextImages) => {
+  this.setState({searchTextImages})
+}
+
   render() {
+    const {showModal} = this.state;
     return (
-      <div>
+      <div className={css.app}>
         2 - Пошук зображень
-        <Searchbar onSubmit={this.handleFormSubmit}/>
+        <Searchbar onSubmit={this.handleFormSubmit} createSearchTextImage={this.createSearchTextImage}/>
         {this.state.loading && <h1>Loading...</h1>}
         {this.state.icon && <div>{this.state.icon.name}</div>}
-        <ImageGallery />
+        <ImageGallery searchTextImages={this.state.searchTextImages}/>
         <ImageGalleryItem />
         <Loader/>
         <Button />
-        <Modal />
+        <button type='button' onClick={this.toggleModal}>open modal</button>
+        {showModal && <Modal><h2>Hooo</h2></Modal>}
       </div>
     );
   }
