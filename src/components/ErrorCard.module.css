@@ -1,0 +1,23 @@
+/* alert-padding-y:               spacer;
+alert-padding-x:               spacer;
+alert-margin-bottom: 1rem;
+alert-border-radius:           border-radius;
+alert-link-font-weight:        font-weight-bold;
+alert-border-width:            var(--#{$prefix}border-width);
+alert-bg-scale:                -80%;
+alert-border-scale:            -70%;
+alert-color-scale:             40%;
+alert-dismissible-padding-r:   alert-padding-x * 3; */
+
+.alert{
+  margin-top: 5px;
+  background: #787373;
+  border: 2px;
+  color: black;
+  padding-right:   alert-padding-x * 3;
+} 
+
+.alert-danger{
+border: 4px solid #ed8d8d;
+color: white;
+}
