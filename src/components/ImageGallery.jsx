@@ -2,6 +2,7 @@
 import { Component } from 'react';
 import { getImages } from 'services/fetch';
 import { ErrorCard } from './ErrorCard';
+import { ImageGalleryItem } from './ImageGalleryItem';
 
 import css from './ImageGallery.module.css';
 
@@ -10,6 +11,8 @@ export class ImageGallery extends Component {
     images: null,
     error: '',
     isLoading: false,
+    page: 1,
+    per_page: 12,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -17,18 +20,19 @@ export class ImageGallery extends Component {
 
     if (prevProps.searchTextImages !== searchTextImages && searchTextImages) {
       console.log('fetch', searchTextImages);
-      this.setState({isLoading: true})
+      this.setState({ isLoading: true });
       getImages(searchTextImages)
         .then(data => {
           if (data.status === 'error') return Promise.reject(data.message);
-          this.setState({ images: data.hits });
+          this.setState({ images: data.hits, error: '', page: data.page + 1 });
         })
-        .catch((error) => {
+        .catch(error => {
           console.log('error', error);
           this.setState({ error });
-        }).finally(()=>{
-          this.setState({isLoading: false})
         })
+        .finally(() => {
+          this.setState({ isLoading: false });
+        });
     }
   }
 
@@ -37,19 +41,26 @@ export class ImageGallery extends Component {
 
     return (
       <>
-      {isLoading&&<h2>Loadins...</h2>}
-        {error && <ErrorCard>{error}</ErrorCard>}
+        {isLoading && <h2>Loadins...</h2>}
+        {error && (
+          <ErrorCard>Whoops, something went wrong: {error.message}</ErrorCard>
+        )}
         {images && (
           <ul className={css.gallery}>
             {images.map(el => (
-              <li key={el.id} className={css['image-gallery-item']}>
-                {el.user}
-                <img
-                  className={css['gallery-item']}
-                  src={el.largeImageURL}
-                  alt={el.user}
-                />
-              </li>
+              <ImageGalleryItem
+                clargeImageURL={el.largeImageURL}
+                user={el.user}
+                id={el.id}
+              />
+              // <li key={el.id} className={css['image-gallery-item']}>
+              //   {el.user}
+              //   <img
+              //     className={css['gallery-item']}
+              //     src={el.largeImageURL}
+              //     alt={el.user}
+              //   />
+              // </li>
             ))}
           </ul>
         )}

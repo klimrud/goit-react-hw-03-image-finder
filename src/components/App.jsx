@@ -29,26 +29,31 @@ handleFormSubmit = (value)=>{
 toggleModal = () => {
   this.setState(({showModal}) =>({
     showModal: !showModal,
-  }))
-}
+  }));
+};
+
 createSearchTextImage = (searchTextImages) => {
   this.setState({searchTextImages})
 }
 
+onClickLoad = () => {
+  console.log('loader')
+}
+
   render() {
-    const {showModal} = this.state;
+    const {showModal,location} = this.state;
     return (
       <div className={css.app}>
         2 - Пошук зображень
+        {showModal && <Modal onClose={this.toggleModal}><h2>Hooo</h2></Modal>}
         <Searchbar onSubmit={this.handleFormSubmit} createSearchTextImage={this.createSearchTextImage}/>
-        {this.state.loading && <h1>Loading...</h1>}
+        {this.state.loading &&  (<><Loader loading={location}/><h1>Loading...</h1></>)}
         {this.state.icon && <div>{this.state.icon.name}</div>}
         <ImageGallery searchTextImages={this.state.searchTextImages}/>
         <ImageGalleryItem />
-        <Loader/>
-        <Button />
+        {/* <Loader loading={location}/> */}
+        <Button onClickLoader={this.onClickLoad}/>
         <button type='button' onClick={this.toggleModal}>open modal</button>
-        {showModal && <Modal><h2>Hooo</h2></Modal>}
       </div>
     );
   }

@@ -26,7 +26,7 @@ export class Searchbar extends Component {
         <form className={css.form} onSubmit={this.handleSubmit}>
           <button type="submit" className={css.button}>
             <span className={css['button-label']}>
-              <BiSearchAlt2 className={css['icon-search']}/>
+              <BiSearchAlt2 className={css['icon-search']} width='24'  height='24' fill='red'/>
               </span>
           </button>
 
