@@ -1,22 +1,13 @@
 .icon-search {
     width: 24px;
     height: 24px;
-    fill:brown;
-    position: absolute;
-   z-index: 9999;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    clip-path: inset(50%);
-    border: 0;
-  
+    fill:#000;
 }
 
 /*
  * Стили компонента Searchbar
  */
- .searchbar {
+ .search-bar {
   top: 0;
   left: 0;
   position: -sticky;

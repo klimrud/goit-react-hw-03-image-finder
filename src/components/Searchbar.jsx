@@ -8,7 +8,7 @@ export class Searchbar extends Component {
   };
 
   heandleChange = e => {
-    console.log('e.currentTarget.value', e.currentTarget.value);
+    // console.log('e.currentTarget.value', e.currentTarget.value);
     this.setState({ value: e.currentTarget.value.toLowerCase() });
   };
 
@@ -17,24 +17,27 @@ export class Searchbar extends Component {
     console.log('hi');
     // this.props.onSubmit(this.state.value);
     // this.setState({ value: '' });
-    this.props.createSearchTextImage(this.state.value)
+    this.props.createSearchTextImage(this.state.value);
   };
 
   render() {
     return (
-      <header className={css.searchbar}>
+      <header className={css['search-bar']}>
         <form className={css.form} onSubmit={this.handleSubmit}>
           <button type="submit" className={css.button}>
-            <span className={css['button-label']}>
-              <BiSearchAlt2 className={css['icon-search']} width='24'  height='24' fill='red'/>
-              </span>
+              <BiSearchAlt2
+                className={css['icon-search']}
+                width="24"
+                height="24"
+                fill="red"
+              />
           </button>
 
           <input
             className={css.input}
             type="text"
-            autocomplete="off"
-            autofocus
+            // autocomplete="off"
+            // autofocus
             value={this.state.value}
             onChange={this.heandleChange}
             placeholder="Search images and photos"

@@ -2,14 +2,16 @@
 import { Component } from 'react';
 import { getImages } from 'services/fetch';
 import { ErrorCard } from './ErrorCard';
+import { Loader } from './Loader.jsx';
 import { ImageGalleryItem } from './ImageGalleryItem';
+import { Button } from './Button.jsx';
 
 import css from './ImageGallery.module.css';
 
 export class ImageGallery extends Component {
   state = {
     images: null,
-    error: '',
+    error: null,
     isLoading: false,
     page: 1,
     per_page: 12,
@@ -24,7 +26,8 @@ export class ImageGallery extends Component {
       getImages(searchTextImages)
         .then(data => {
           if (data.status === 'error') return Promise.reject(data.message);
-          this.setState({ images: data.hits, error: '', page: data.page + 1 });
+          else  if(data.hits.length === 0)throw new Error('!!! Sorry, there are no images matching your search query. Please try again.');
+          this.setState({ images: data.hits, error: null, page: data.page +1 });  
         })
         .catch(error => {
           console.log('error', error);
@@ -34,35 +37,46 @@ export class ImageGallery extends Component {
           this.setState({ isLoading: false });
         });
     }
+    
   }
 
+  // nextPage(){
+  //   this.setState({ page:this.page + 1})
+  // }
+
+
+  // onClickLoader = (e) => {
+  //   console.log('loader');
+  //   console.log('e.target', e.target)
+   
+  // };
+
   render() {
-    const { images, error, isLoading } = this.state;
+    const { images, error, isLoading} = this.state;
 
     return (
       <>
-        {isLoading && <h2>Loadins...</h2>}
+        {isLoading && (<>
+            <Loader loading={isLoading} />
+             <h1>Loading...</h1>
+          </>)}
         {error && (
           <ErrorCard>Whoops, something went wrong: {error.message}</ErrorCard>
         )}
         {images && (
-          <ul className={css.gallery}>
-            {images.map(el => (
-              <ImageGalleryItem
-                clargeImageURL={el.largeImageURL}
-                user={el.user}
-                id={el.id}
-              />
-              // <li key={el.id} className={css['image-gallery-item']}>
-              //   {el.user}
-              //   <img
-              //     className={css['gallery-item']}
-              //     src={el.largeImageURL}
-              //     alt={el.user}
-              //   />
-              // </li>
-            ))}
-          </ul>
+          <>
+            <ul className={css.gallery} >
+              {images.map(el => (
+                <ImageGalleryItem key={el.largeImageURL} 
+                webformatURL={el.webformatURL}
+                  user={el.user}
+                  id={el.id}
+                  onClick={this.props.onClick}
+                />
+              ))}
+            </ul>
+            <Button type="click" onClickLoader={event => console.log(event)}>Click me!</Button>
+          </>
         )}
       </>
     );

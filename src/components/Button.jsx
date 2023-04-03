@@ -2,16 +2,17 @@
 import { PropTypes } from 'prop-types';
 import css from './Button.module.css'
 
-export const Button =({children ,onClickLoad})=> {
-  return (<button type='button' className={css.button} onClickLoad={onClickLoad}>Load more</button>)
+export const Button =({children ,onClickLoader})=> {
+
+  return (<button type='click' className={css.button} onClickLoader={onClickLoader}>{children}Load more</button>)
 }
 
 Button.defaultProps = {
-  onClickLoad: () => null,
+  onClickLoader: () => null,
   children: null,
 }
 
 Button.propTypes = {
-  onClickLoad: PropTypes.func,
+  onClickLoader: PropTypes.func,
   children: PropTypes.node,
 }
