@@ -15,8 +15,8 @@ export class Searchbar extends Component {
   handleSubmit = e => {
     e.preventDefault();
     console.log('hi');
-    // this.props.onSubmit(this.state.value);
-    // this.setState({ value: '' });
+     this.props.onSubmit(this.state.value);
+     this.setState({ value: '' });
     this.props.createSearchTextImage(this.state.value);
   };
 

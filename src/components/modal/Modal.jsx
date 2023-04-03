@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { createPortal } from 'react-dom';
-//  import { PropTypes } from 'prop-types';
+import { PropTypes } from 'prop-types';
 // import  as basicLightbox from 'basiclightbox';
 import css from './Modal.module.css';
 //  const basicLightbox = require('basiclightbox');
@@ -18,15 +18,13 @@ import css from './Modal.module.css';
 // instance.show()
 
 const modalRoot = document.querySelector('#modal-root');
+
 export class Modal extends Component {
- 
   componentDidMount() {
     console.log('Modal DidMount');
-   
     window.addEventListener('keydown', this.handleKeyDowne);
   }
 
- 
   componentWillUnmount() {
     console.log('Will Unmount');
     window.removeEventListener('keydown', this.handleKeyDowne);
@@ -37,7 +35,7 @@ export class Modal extends Component {
     // console.log('e.code', e.code);
     if (e.code === 'Escape') {
       console.log('click Escape');
-      this.props.onClose();
+      this.props.onCloseModal();
     }
   };
 
@@ -46,21 +44,25 @@ export class Modal extends Component {
     // console.log('на чем сработал обработчик события', event.currentTarget);
     // console.log('на что кликнули', event.target);
     if (event.currentTarget === event.target) {
-      this.props.onClose();
+      this.props.onCloseModal();
     }
   };
 
-
   render() {
-    
-    console.log('this.largeImageURL', this.props)
+    // console.log('this.largeImageURL', this.props)
     return createPortal(
       <div className={css.overlay} onClick={this.handelBackdropClick}>
-        <div className={css.modal} >
-          <img src={this.largeImageURL} alt="" width="800" height="600" />
+        <div className={css.modal}>
+          {this.props.children}
+          {/* <img src="" alt="" width="800" height="600" /> */}
         </div>
       </div>,
       modalRoot
     );
   }
+}
+
+Modal.propTypes = {
+  onCloseModal: PropTypes.func,
+  onClick: PropTypes.func,
 }
