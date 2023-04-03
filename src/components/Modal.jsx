@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 //  import { PropTypes } from 'prop-types';
 // import  as basicLightbox from 'basiclightbox';
 import css from './Modal.module.css';
- const basicLightbox = require('basiclightbox');
+//  const basicLightbox = require('basiclightbox');
 
 // onClick = () => {
 // 	basicLightbox.create(`

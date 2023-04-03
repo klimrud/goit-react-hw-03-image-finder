@@ -58,7 +58,6 @@ export class App extends Component {
         <ImageGallery
           searchTextImages={this.state.searchTextImages}
           onClick={this.toggleModal}
-          onClickLoader={this.onClickLoader}
         /> )}
       </div>
     );

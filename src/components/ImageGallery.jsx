@@ -75,7 +75,7 @@ export class ImageGallery extends Component {
                 />
               ))}
             </ul>
-            <Button type="click" onClickLoader={event => console.log(event)}>Click me!</Button>
+            <Button onClickLoader={event => console.log(event)}>Click me!</Button>
           </>
         )}
       </>
@@ -83,6 +83,3 @@ export class ImageGallery extends Component {
   }
 }
 
-// id, webformatURL, largeImageURL
-// page: 1,
-// per_page: 12
