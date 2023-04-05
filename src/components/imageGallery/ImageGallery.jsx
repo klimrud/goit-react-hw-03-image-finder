@@ -22,7 +22,7 @@ export class ImageGallery extends Component {
     const searchTextImages = this.props.searchTextImages.trim();
 
     if (
-      prevProps.searchTextImages !== searchTextImages &&
+      prevProps.searchTextImages === searchTextImages &&
       searchTextImages &&
       prevState.page !== this.state.page &&
       this.state.page === 1
@@ -40,6 +40,7 @@ export class ImageGallery extends Component {
         page: 1,
         images: [],
         isLoading: true,
+        disabled: false,
       }); //сброс
     }
     if (
