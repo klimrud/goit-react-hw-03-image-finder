@@ -8,16 +8,13 @@ export class Searchbar extends Component {
   };
 
   heandleChange = e => {
-    // console.log('e.currentTarget.value', e.currentTarget.value);
     this.setState({ value: e.currentTarget.value.toLowerCase() });
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log('hi');
-     this.props.onSubmit(this.state.value);
-     this.setState({ value: '' });
     this.props.createSearchTextImage(this.state.value);
+    this.setState({ value: '' });
   };
 
   render() {
@@ -25,12 +22,11 @@ export class Searchbar extends Component {
       <header className={css['search-bar']}>
         <form className={css.form} onSubmit={this.handleSubmit}>
           <button type="submit" className={css.button}>
-              <BiSearchAlt2
-                className={css['icon-search']}
-                width="24"
-                height="24"
-                fill="red"
-              />
+            <BiSearchAlt2
+              className={css['icon-search']}
+              width="24"
+              height="24"
+            />
           </button>
 
           <input

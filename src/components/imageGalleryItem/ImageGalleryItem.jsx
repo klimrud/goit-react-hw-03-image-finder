@@ -28,7 +28,7 @@ export class ImageGalleryItem extends Component {
         />
         {this.state.showModal && (
           <Modal onCloseModal={this.toggleModal}>
-            <img src={largeImageURL} alt={tags} width="800" height="600"/>
+            <img src={largeImageURL} alt={tags} width="800" height="600" />
           </Modal>
         )}
       </li>

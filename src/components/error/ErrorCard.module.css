@@ -11,13 +11,14 @@ alert-dismissible-padding-r:   alert-padding-x * 3; */
 
 .alert{
   margin-top: 5px;
-  background: #787373;
+  background: #c56c6c;
   border: 2px;
-  color: black;
+  color: white;
   padding-right:   alert-padding-x * 3;
+  padding: 20px;
 } 
 
-.alert-danger{
+/* .alert-danger{
 border: 4px solid #ed8d8d;
 color: white;
-}
+} */

@@ -1,4 +1,3 @@
-//  import React from 'react';
 import { Component } from 'react';
 
 import { getImages } from 'services/fetch';
@@ -12,113 +11,95 @@ import css from './ImageGallery.module.css';
 
 export class ImageGallery extends Component {
   state = {
-    imagesArr: [],
-    error: null,
+    images: [],
+    error: '',
     isLoading: false,
-    page: 1,
-    // per_page: 12,
     disabled: false,
+    page: 1,
   };
 
   componentDidUpdate(prevProps, prevState) {
     const searchTextImages = this.props.searchTextImages.trim();
 
     if (
-      prevProps.searchTextImages === searchTextImages &&
+      prevProps.searchTextImages !== searchTextImages &&
+      searchTextImages &&
       prevState.page !== this.state.page &&
       this.state.page === 1
     ) {
-      console.log('новый запрос');
-      this.getFetchImages();
+      this.onFetchImages(); //новый запрос
     }
 
     if (
-      prevProps.searchTextImages !== searchTextImages &&
-      this.state.page !== 1
+      (searchTextImages !== prevProps.searchTextImages &&
+        searchTextImages &&
+        this.state.page !== 1) ||
+      (prevProps.searchTextImages !== searchTextImages && this.state.page === 1)
     ) {
-      console.log('сброс');
-      this.setState({ page: 1, imagesArr: [] });
+      this.setState({
+        page: 1,
+        images: [],
+        isLoading: true,
+      }); //сброс
     }
     if (
-      prevProps.searchTextImages !== searchTextImages &&
+      searchTextImages !== prevProps.searchTextImages &&
+      this.props.searchTextImages &&
       this.state.page === 1
     ) {
-      console.log('запрос 1');
-      this.getFetchImages();
+      this.onFetchImages(); //запрос 1
     }
-    if (this.state.page !== 1 && prevState.page !== this.state.page) {
-      console.log('новая стр');
-      this.getFetchImages();
+    if (prevState.page !== this.state.page && this.state.page !== 1) {
+      this.onFetchImages(); //новая стр
     }
   }
-    async getFetchImages() {
-    try {
-      this.setState({ error: false });
-      this.setState({ isLoading: true });
-      const getImagesArr = await getImages(
-        this.props.searchTextImages,
-        this.state.page
-      );
-      if (getImagesArr.length === 0)
-        throw new Error(
-          ' Sorry, there are no images matching your search query. Please try again.'
-        );
-      this.setState({
-        imagesArr: [],
-        loading: false,
-        page: 1,
-        disabled: false,
-      });
-      return;
 
-      //     .then(data => {
-      //       if (data.status === 'error') return Promise.reject(data.message);
-      //       else if (data.hits.length === 0)
-      //         throw new Error(
-      //           '!!! Sorry, there are no images matching your search query. Please try again.'
-      //         );
-      //       this.setState(prev => ({
-      //         //  imagesArr: data.hits, error: null, page: data.page +1
-      //         imagesArr: [...prev.imagesArr, ...data.hits],
-      //         error: false,
-      //         // page: data.page,
-      //         disabled: true,
-      //       }));
-      //       console.log('data', data);
+  onFetchImages = () => {
+    this.setState({ error: false, isLoading: true });
+    getImages(this.props.searchTextImages, this.state.page)
+      .then(data => {
+        if (data.hits.length === 0) {
+          this.setState(prev => ({
+            images: [],
+            page: 1,
+            error: true,
+            isLoading: false,
+            disabled: false,
+          }));
+          throw new Error(
+            '!!! Sorry, there are no images matching your search query. Please try again.'
+          );
+        }
+        if (data.hits.length >= 12) {
+          this.setState({ disabled: true });
+        }
+        this.setState({ disabled: false });
 
-      //   if (getImagesArr.length === 12) {this.setState({ disabled: true });}
-      //  else {this.setState({ disabled: false });}
-      //   this.setState(({imagesArr}) => ({
-      //       imagesArr: [...imagesArr, ...getImagesArr],
-      //       isLoading: false ,
-      // }));
-    } catch (error) {
-      console.log('error', error);
-      this.setState({
-        error: true,
-        disabled: false,
-        page: 1,
-        imagesArr: [],
+        this.setState(prev => ({
+          images: [...prev.images, ...data.hits],
+          isLoading: false,
+        }));
+      })
+      .catch(error => {
+        console.log('error', error);
+        this.setState({
+          error: true,
+          images: [],
+          disabled: false,
+          page: 1,
+        });
+      })
+      .finally(() => {
+        this.setState({ isLoading: false });
       });
-    }
-    //     .finally(() => {
-    //       this.setState({ isLoading: false });
-    //     });
   };
 
-  // nextPage(){
-  //   this.setState({ page:this.page + 1})
-  // }
-
   onClickLoader = () => {
-    console.log('loader', this.state.page);
-
     this.setState(({ page }) => ({ page: page + 1 }));
-    console.log('page', this.state.page);
   };
 
   render() {
-    const { imagesArr, error, isLoading, disabled } = this.state;
+    const { images, error, isLoading, disabled } = this.state;
 
     return (
       <>
@@ -129,12 +110,15 @@ export class ImageGallery extends Component {
           </>
         )}
         {error && (
-          <ErrorCard>Whoops, something went wrong: {error.message}</ErrorCard>
+          <ErrorCard>
+            Whoops, something went wrong: !!!Sorry, there are no images matching
+            your search query. Please try again.
+          </ErrorCard>
         )}
-        {imagesArr && (
+        {images && (
           <>
             <ul className={css.gallery}>
-              {imagesArr.map(el => (
+              {images.map(el => (
                 <ImageGalleryItem
                   key={el.largeImageURL}
                   webformatURL={el.webformatURL}
@@ -145,7 +129,7 @@ export class ImageGallery extends Component {
                 />
               ))}
             </ul>
-            {disabled && <Button onClickLoader={this.onClickLoader} />}
+            {!disabled && <Button onClickLoader={this.onClickLoader} />}
           </>
         )}
       </>
@@ -155,7 +139,7 @@ export class ImageGallery extends Component {
 
 ImageGallery.propType = {
   state: PropTypes.exact({
-    imagesArr: PropTypes.array,
+    images: PropTypes.array,
   }),
   largeImageURL: PropTypes.string,
   webformatURL: PropTypes.string,
