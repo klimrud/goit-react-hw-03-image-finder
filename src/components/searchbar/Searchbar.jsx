@@ -7,14 +7,15 @@ export class Searchbar extends Component {
     value: '',
   };
 
-  heandleChange = e => {
-    this.setState({ value: e.currentTarget.value.toLowerCase() });
+  heandleChange = ({ target: { value } }) => {
+    this.setState({ value });
   };
 
   handleSubmit = e => {
     e.preventDefault();
+
     this.props.createSearchTextImage(this.state.value);
-    this.setState({ value: '' });
+    //  this.setState({ value: '' });
   };
 
   render() {
@@ -31,7 +32,7 @@ export class Searchbar extends Component {
 
           <input
             className={css.input}
-            type="text"
+            type="search"
             // autocomplete="off"
             // autofocus
             value={this.state.value}

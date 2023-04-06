@@ -11,8 +11,8 @@ export class App extends Component {
     searchTextImages: '',
   };
 
-  createSearchTextImage = value => {
-    this.setState({ searchTextImages: value });
+  createSearchTextImage = searchTextImages => {
+    this.setState({ searchTextImages });
   };
 
   render() {
@@ -20,9 +20,7 @@ export class App extends Component {
       <div className={css.app}>
         2 - Пошук зображень
         <Searchbar createSearchTextImage={this.createSearchTextImage} />
-        {this.state.searchTextImages && (
-          <ImageGallery searchTextImages={this.state.searchTextImages} />
-        )}
+        <ImageGallery searchTextImages={this.state.searchTextImages} />
       </div>
     );
   }

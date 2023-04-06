@@ -12,73 +12,66 @@ import css from './ImageGallery.module.css';
 export class ImageGallery extends Component {
   state = {
     images: [],
-    error: '',
+    error: null,
     isLoading: false,
     disabled: false,
     page: 1,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const searchTextImages = this.props.searchTextImages.trim();
+    const searchImages = this.props.searchTextImages.trim();
 
     if (
-      prevProps.searchTextImages === searchTextImages &&
-      searchTextImages &&
+      prevProps.searchTextImages !== searchImages &&
       prevState.page !== this.state.page &&
       this.state.page === 1
     ) {
+      this.setState({ disabled: true });
       this.onFetchImages(); //новый запрос
     }
 
-    if (
-      (searchTextImages !== prevProps.searchTextImages &&
-        searchTextImages &&
-        this.state.page !== 1) ||
-      (prevProps.searchTextImages !== searchTextImages && this.state.page === 1)
-    ) {
+    if (searchImages !== prevProps.searchTextImages && this.state.page !== 1) {
       this.setState({
         page: 1,
         images: [],
-        isLoading: true,
+        isLoading: false,
         disabled: false,
+        error: true,
       }); //сброс
     }
-    if (
-      searchTextImages !== prevProps.searchTextImages &&
-      this.props.searchTextImages &&
-      this.state.page === 1
-    ) {
+    if (searchImages !== prevProps.searchTextImages && this.state.page === 1) {
       this.onFetchImages(); //запрос 1
-    }
-    if (prevState.page !== this.state.page && this.state.page !== 1) {
+    } else if (prevState.page !== this.state.page && this.state.page !== 1) {
       this.onFetchImages(); //новая стр
     }
   }
 
   onFetchImages = () => {
     this.setState({ error: false, isLoading: true });
+
     getImages(this.props.searchTextImages, this.state.page)
       .then(data => {
         if (data.hits.length === 0) {
-          this.setState(prev => ({
+          console.log('lengt 0');
+          this.setState({
             images: [],
             page: 1,
             error: true,
             isLoading: false,
             disabled: false,
-          }));
+          });
           throw new Error(
             '!!! Sorry, there are no images matching your search query. Please try again.'
           );
-        }
-        if (data.hits.length >= 12) {
+        } else if (data.totalHits > 12) {
           this.setState({ disabled: true });
         }
-        this.setState({ disabled: false });
 
         this.setState(prev => ({
-          images: [...prev.images, ...data.hits],
+          ...prev,
+          images: data.hits,
           isLoading: false,
+          disabled: true,
         }));
       })
       .catch(error => {
@@ -86,8 +79,6 @@ export class ImageGallery extends Component {
         this.setState({
           error: true,
           images: [],
-          disabled: false,
-          page: 1,
         });
       })
       .finally(() => {
@@ -130,7 +121,7 @@ export class ImageGallery extends Component {
                 />
               ))}
             </ul>
-            {!disabled && <Button onClickLoader={this.onClickLoader} />}
+            {!disabled || <Button onClickLoader={this.onClickLoader} />}
           </>
         )}
       </>
