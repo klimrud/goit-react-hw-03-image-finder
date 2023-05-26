@@ -52,7 +52,7 @@ export class ImageGallery extends Component {
     getImages(this.props.searchTextImages, this.state.page)
       .then(data => {
         if (data.hits.length === 0) {
-          console.log('lengt 0');
+          console.log('length 0');
           this.setState({
             images: [],
             page: 1,

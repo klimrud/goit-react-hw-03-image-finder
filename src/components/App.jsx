@@ -18,7 +18,6 @@ export class App extends Component {
   render() {
     return (
       <div className={css.app}>
-        2 - Пошук зображень
         <Searchbar createSearchTextImage={this.createSearchTextImage} />
         <ImageGallery searchTextImages={this.state.searchTextImages} />
       </div>
@@ -28,5 +27,5 @@ export class App extends Component {
 
 App.propTypes = {
   createSearchTextImage: PropTypes.func,
-  earchTextImages: PropTypes.string,
+  searchTextImages: PropTypes.string,
 };
